@@ -1,0 +1,15 @@
+# Environments and Secrets
+venv/
+.env
+__pycache__/
+*.pyc
+
+# Scrapy generated data and media
+media/
+data/
+*.json
+*.csv
+.scrapy/
+
+# Optional: Ignore OS generated files
+.DS_Store
