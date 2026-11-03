@@ -9,9 +9,8 @@ class BooksSpider(scrapy.Spider):
     start_urls = ["https://books.toscrape.com"]
     custom_settings = {
         'ROTATING_PROXY_LIST': [
-            '207.180.254.198:8080',
-            '47.89.184.18:3128'
-        ]
+            # Add your proxy list here
+        ],
     }
 
     def parse(self, response):

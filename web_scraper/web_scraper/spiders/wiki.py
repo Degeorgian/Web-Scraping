@@ -19,11 +19,6 @@ class WikiSpider(CrawlSpider):
     custom_settings = {
         'ROTATING_PROXY_LIST': [
             # Add Wikimedia-specific proxies here
-            '101.255.117.70:8080',
-            '101.255.32.43:8080',
-            '174.138.161.197:8254',
-            '103.29.151.146:3128',
-            '15.204.14.225:30017'
         ],
         # Prevent massive video files from timing out or getting dropped
         'DOWNLOAD_MAXSIZE': 104857600,  # 100 MB limit for learning/testing
