@@ -41,10 +41,9 @@ class ProvenanceAndValidationSpiderMiddleware:
     """Tags items with extraction metadata and filters malformed outputs."""
     
     def process_spider_output(self, response, result, spider):
+        """Handles standard synchronous spider output."""
         for element in result:
-            # Enrich extracted Items with runtime metadata
             if isinstance(element, (dict, scrapy.Item)):
-                # Validation: Drop items missing a primary URL identifier
                 url = element.get('url') or element.get('page_url')
                 if not url:
                     logger.error("Dropped malformed item missing primary URL.")
@@ -56,6 +55,23 @@ class ProvenanceAndValidationSpiderMiddleware:
                 
                 yield element
             
-            # Pass outgoing pagination/media requests through untouched
+            elif isinstance(element, scrapy.Request):
+                yield element
+
+    async def process_spider_output_async(self, response, result, spider):
+        """Handles asynchronous spider output (Scrapy 2.7+ requirement)."""
+        async for element in result:
+            if isinstance(element, (dict, scrapy.Item)):
+                url = element.get('url') or element.get('page_url')
+                if not url:
+                    logger.error("Dropped malformed item missing primary URL.")
+                    continue
+                
+                element['crawl_depth'] = response.meta.get('depth', 0)
+                element['crawl_timestamp'] = datetime.now(timezone.utc).isoformat()
+                element['original_status'] = response.status
+                
+                yield element
+            
             elif isinstance(element, scrapy.Request):
                 yield element
